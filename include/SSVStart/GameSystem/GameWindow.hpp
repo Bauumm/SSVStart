@@ -71,14 +71,14 @@ private:
                     break;
                 case sf::Event::TouchBegan:
                     inputState.getFingerState(event.touch.finger) = true;
-		    inputState.getFingerPos(event.touch.finger) = sf::Vector2i(event.touch.x, event.touch.y);
+		    inputState.setFingerPos(event.touch.finger, event.touch.x, event.touch.y);
                     break;
 		case sf::Event::TouchMoved:
-		    inputState.getFingerPos(event.touch.finger) = sf::Vector2i(event.touch.x, event.touch.y);
+		    inputState.setFingerPos(event.touch.finger, event.touch.x, event.touch.y);
 		    break;
                 case sf::Event::TouchEnded:
                     inputState.getFingerState(event.touch.finger) = false;
-		    inputState.getFingerPos(event.touch.finger) = sf::Vector2i(event.touch.x, event.touch.y);
+		    inputState.setFingerPos(event.touch.finger, event.touch.x, event.touch.y);
                     break;
                 default: break;
             }

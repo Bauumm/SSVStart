@@ -25,6 +25,11 @@ private:
     BtnBitset btns;
 
 public:
+    inline void setFingerPos(FingerID mX, int x, int y) noexcept
+    {
+        fingerPos[mX].x = x;
+        fingerPos[mX].y = y;
+    }
     inline auto getFingerPos(FingerID mX) noexcept
     {
         return fingerPos[mX];
