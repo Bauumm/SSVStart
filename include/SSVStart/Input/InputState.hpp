@@ -6,6 +6,7 @@
 #define SSVS_INPUT_INPUTSTATE
 
 #include "SSVStart/Global/Typedefs.hpp"
+#include <SFML/System/Vector2.hpp>
 
 namespace ssvs
 {
@@ -18,14 +19,19 @@ class InputState
     friend ssvs::GameWindow;
 
 private:
-    FingerBitset fingers;
+    FingerBitset fingerStates;
+    FingerPositions fingerPos;
     KeyBitset keys;
     BtnBitset btns;
 
 public:
-    inline auto getFinger(FingerID mX) noexcept
+    inline auto getFingerPos(FingerID mX) noexcept
     {
-        return getFingerBit(fingers, mX);
+        return fingerPos[mX];
+    }
+    inline auto getFingerState(FingerID mX) noexcept
+    {
+        return getFingerBit(fingerStates, mX);
     }
     inline auto operator[](KKey mKey) noexcept
     {
@@ -35,9 +41,13 @@ public:
     {
         return getBtnBit(btns, mBtn);
     }
-    inline bool getFinger(FingerID mX) const noexcept
+    inline sf::Vector2i getFingerPos(FingerID mX) const noexcept
     {
-        return getFingerBit(fingers, mX);
+        return fingerPos[mX];
+    }
+    inline bool getFingerState(FingerID mX) const noexcept
+    {
+        return getFingerBit(fingerStates, mX);
     }
     inline bool operator[](KKey mKey) const noexcept
     {
@@ -50,14 +60,18 @@ public:
 
     inline void reset() noexcept
     {
-        fingers.reset();
+        fingerStates.reset();
         keys.reset();
         btns.reset();
     }
 
-    inline auto& getFingers() noexcept
+    inline auto& getFingerPositions() noexcept
     {
-        return fingers;
+        return fingerPos;
+    }
+    inline auto& getFingerStates() noexcept
+    {
+        return fingerStates;
     }
     inline auto& getKeys() noexcept
     {
@@ -67,9 +81,13 @@ public:
     {
         return btns;
     }
-    inline const auto& getFingers() const noexcept
+    inline const auto& getFingerPositions() const noexcept
     {
-        return fingers;
+        return fingerPos;
+    }
+    inline const auto& getFingerStates() const noexcept
+    {
+        return fingerStates;
     }
     inline const auto& getKeys() const noexcept
     {

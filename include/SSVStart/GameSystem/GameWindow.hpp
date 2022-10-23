@@ -9,6 +9,7 @@
 #include "SSVStart/GameSystem/GameEngine.hpp"
 #include "SSVStart/GameSystem/GameState.hpp"
 
+#include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/Touch.hpp>
@@ -69,10 +70,15 @@ private:
                     inputState[event.mouseButton.button] = false;
                     break;
                 case sf::Event::TouchBegan:
-                    inputState.getFinger(event.touch.finger) = true;
+                    inputState.getFingerState(event.touch.finger) = true;
+		    inputState.getFingerPos(event.touch.finger) = sf::Vector2i(event.touch.x, event.touch.y);
                     break;
+		case sf::Event::TouchMoved:
+		    inputState.getFingerPos(event.touch.finger) = sf::Vector2i(event.touch.x, event.touch.y);
+		    break;
                 case sf::Event::TouchEnded:
-                    inputState.getFinger(event.touch.finger) = false;
+                    inputState.getFingerState(event.touch.finger) = false;
+		    inputState.getFingerPos(event.touch.finger) = sf::Vector2i(event.touch.x, event.touch.y);
                     break;
                 default: break;
             }
@@ -283,8 +289,7 @@ public:
     }
     auto getFingerPosition(FingerID mX) const noexcept
     {
-        return renderWindow.mapPixelToCoords(
-            sf::Touch::getPosition(mX, renderWindow));
+        return inputState.fingerPos[mX];
     }
 
     const auto& getInputState() const noexcept
@@ -294,7 +299,7 @@ public:
 
     auto getFingerDownCount() const noexcept
     {
-        return inputState.fingers.count();
+        return inputState.fingerStates.count();
     }
     auto getFingerDownPositions() const noexcept
     {
@@ -302,7 +307,7 @@ public:
 
         // TODO: bitset iteration function (forTrueBits?)
         for(auto i(0u); i < fingerCount; ++i)
-            if(inputState.fingers[i]) result.emplace_back(getFingerPosition(i));
+            if(inputState.fingerStates[i]) result.emplace_back(getFingerPosition(i));
 
         return result;
     }

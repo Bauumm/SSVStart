@@ -31,6 +31,7 @@ inline constexpr std::size_t jBtnCount{sf::Joystick::ButtonCount};
 
 using FingerID = unsigned int;
 using FingerBitset = std::bitset<fingerCount>;
+using FingerPositions = sf::Vector2i[fingerCount];
 
 using KeyBitset =
     std::bitset<kKeyCount + inputBitOffset>; // +offset because it also works
