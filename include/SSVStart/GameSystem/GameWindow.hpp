@@ -70,15 +70,27 @@ private:
                     inputState[event.mouseButton.button] = false;
                     break;
                 case sf::Event::TouchBegan:
-                    inputState.getFingerState(event.touch.finger) = true;
-		    inputState.setFingerPos(event.touch.finger, event.touch.x, event.touch.y);
+                    if(event.touch.finger < fingerCount)
+                    {
+                        inputState.getFingerState(event.touch.finger) = true;
+                        inputState.setFingerPos(
+                            event.touch.finger, event.touch.x, event.touch.y);
+                    }
                     break;
-		case sf::Event::TouchMoved:
-		    inputState.setFingerPos(event.touch.finger, event.touch.x, event.touch.y);
-		    break;
+                case sf::Event::TouchMoved:
+                    if(event.touch.finger < fingerCount)
+                    {
+                        inputState.setFingerPos(
+                            event.touch.finger, event.touch.x, event.touch.y);
+                    }
+                    break;
                 case sf::Event::TouchEnded:
-                    inputState.getFingerState(event.touch.finger) = false;
-		    inputState.setFingerPos(event.touch.finger, event.touch.x, event.touch.y);
+                    if(event.touch.finger < fingerCount)
+                    {
+                        inputState.getFingerState(event.touch.finger) = false;
+                        inputState.setFingerPos(
+                            event.touch.finger, event.touch.x, event.touch.y);
+                    }
                     break;
                 default: break;
             }
@@ -307,7 +319,8 @@ public:
 
         // TODO: bitset iteration function (forTrueBits?)
         for(auto i(0u); i < fingerCount; ++i)
-            if(inputState.fingerStates[i]) result.emplace_back(getFingerPosition(i));
+            if(inputState.fingerStates[i])
+                result.emplace_back(getFingerPosition(i));
 
         return result;
     }
